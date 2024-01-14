@@ -4,22 +4,21 @@ import com.kermeth.profilematcher.profile.application.PlayerProfileRepositoryRea
 import com.kermeth.profilematcher.profile.domain.Clan;
 import com.kermeth.profilematcher.profile.domain.Device;
 import com.kermeth.profilematcher.profile.domain.PlayerProfile;
+import com.kermeth.profilematcher.utils.DateUtils;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+@Qualifier("mongoDbRepository")
 @Repository
 public class MongoDbPlayerProfileRepositoryReactive implements PlayerProfileRepositoryReactive {
 
@@ -91,13 +90,13 @@ public class MongoDbPlayerProfileRepositoryReactive implements PlayerProfileRepo
         return new PlayerProfile(
                 UUID.fromString(playerProfileDocument.getPlayerId()),
                 playerProfileDocument.getCredential(),
-                parseInstant(playerProfileDocument.getCreated()),
-                parseInstant(playerProfileDocument.getModified()),
-                parseInstant(playerProfileDocument.getLastSession()),
+                DateUtils.parseInstant(playerProfileDocument.getCreated()),
+                DateUtils.parseInstant(playerProfileDocument.getModified()),
+                DateUtils.parseInstant(playerProfileDocument.getLastSession()),
                 playerProfileDocument.getTotalSpent(),
                 playerProfileDocument.getTotalRefund(),
                 playerProfileDocument.getTotalTransactions(),
-                parseInstant(playerProfileDocument.getLastPurchase()),
+                DateUtils.parseInstant(playerProfileDocument.getLastPurchase()),
                 playerProfileDocument.getActiveCampaigns(),
                 playerProfileDocument.getDevices(),
                 playerProfileDocument.getLevel(),
@@ -105,16 +104,11 @@ public class MongoDbPlayerProfileRepositoryReactive implements PlayerProfileRepo
                 playerProfileDocument.getTotalPlaytime(),
                 playerProfileDocument.getCountry(),
                 playerProfileDocument.getLanguage(),
-                parseInstant(playerProfileDocument.getBirthdate()),
+                DateUtils.parseInstant(playerProfileDocument.getBirthdate()),
                 playerProfileDocument.getGender(),
                 playerProfileDocument.getInventory(),
                 playerProfileDocument.getClan(),
                 playerProfileDocument.getCustomFields()
         );
-    }
-
-    private Instant parseInstant(String date) {
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
-        return ZonedDateTime.parse(date, formatter).toInstant();
     }
 }

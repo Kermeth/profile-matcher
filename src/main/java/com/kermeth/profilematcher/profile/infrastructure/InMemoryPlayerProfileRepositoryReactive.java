@@ -4,16 +4,18 @@ import com.kermeth.profilematcher.profile.application.PlayerProfileRepositoryRea
 import com.kermeth.profilematcher.profile.domain.Clan;
 import com.kermeth.profilematcher.profile.domain.Device;
 import com.kermeth.profilematcher.profile.domain.PlayerProfile;
+import com.kermeth.profilematcher.utils.DateUtils;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+@Qualifier("inMemoryRepository")
 @Repository
 public class InMemoryPlayerProfileRepositoryReactive implements PlayerProfileRepositoryReactive {
 
@@ -25,13 +27,13 @@ public class InMemoryPlayerProfileRepositoryReactive implements PlayerProfileRep
         var profile1 = new PlayerProfile(
                 UUID.fromString("97983be2-98b7-11e7-90cf-082e5f28d836"),
                 "apple_credential",
-                parseInstant("2021-01-10 13:37:17Z"),
-                parseInstant("2021-01-23 13:37:17Z"),
-                parseInstant("2021-01-23 13:37:17Z"),
+                DateUtils.parseInstant("2021-01-10 13:37:17Z"),
+                DateUtils.parseInstant("2021-01-23 13:37:17Z"),
+                DateUtils.parseInstant("2021-01-23 13:37:17Z"),
                 400,
                 0,
                 5,
-                parseInstant("2021-01-22 13:37:17Z"),
+                DateUtils.parseInstant("2021-01-22 13:37:17Z"),
                 List.of(),
                 List.of(new Device(
                         1,
@@ -44,7 +46,7 @@ public class InMemoryPlayerProfileRepositoryReactive implements PlayerProfileRep
                 144,
                 "CA",
                 "fr",
-                parseInstant("2000-01-10 13:37:17Z"),
+                DateUtils.parseInstant("2000-01-10 13:37:17Z"),
                 "male",
                 Map.of(
                         "cash", 123,
@@ -62,11 +64,6 @@ public class InMemoryPlayerProfileRepositoryReactive implements PlayerProfileRep
                 )
         );
         database.put(profile1.playerId().toString(), profile1);
-    }
-
-    private Instant parseInstant(String date) {
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
-        return ZonedDateTime.parse(date, formatter).toInstant();
     }
 
     @Override
