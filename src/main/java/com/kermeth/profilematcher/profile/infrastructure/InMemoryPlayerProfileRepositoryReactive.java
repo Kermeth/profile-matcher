@@ -1,11 +1,12 @@
 package com.kermeth.profilematcher.profile.infrastructure;
 
-import com.kermeth.profilematcher.profile.application.PlayerProfileRepository;
+import com.kermeth.profilematcher.profile.application.PlayerProfileRepositoryReactive;
 import com.kermeth.profilematcher.profile.domain.Clan;
 import com.kermeth.profilematcher.profile.domain.Device;
 import com.kermeth.profilematcher.profile.domain.PlayerProfile;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -14,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Repository
-public class InMemoryPlayerProfileRepository implements PlayerProfileRepository {
+public class InMemoryPlayerProfileRepositoryReactive implements PlayerProfileRepositoryReactive {
 
     private final Map<String, PlayerProfile> database = new HashMap<>();
 
@@ -33,7 +34,7 @@ public class InMemoryPlayerProfileRepository implements PlayerProfileRepository 
                 parseInstant("2021-01-22 13:37:17Z"),
                 List.of(),
                 List.of(new Device(
-                        "1",
+                        1,
                         "apple iphone 11",
                         "vodafone",
                         "123"
@@ -69,8 +70,8 @@ public class InMemoryPlayerProfileRepository implements PlayerProfileRepository 
     }
 
     @Override
-    public PlayerProfile getProfile(String playerId) {
-        return Optional.of(database.get(playerId))
-                .orElseThrow(() -> new RuntimeException("Player not found"));
+    public Mono<PlayerProfile> getProfile(String playerId) {
+        return Mono.justOrEmpty(database.get(playerId))
+                .switchIfEmpty(Mono.error(() -> new RuntimeException("Player not found")));
     }
 }

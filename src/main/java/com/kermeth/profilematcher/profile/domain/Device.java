@@ -1,7 +1,7 @@
-package com.kermeth.profilematcher.model.player.profile;
+package com.kermeth.profilematcher.profile.domain;
 
 public record Device(
-        String id,
+        Integer id,
         String model,
         String carrier,
         String firmware

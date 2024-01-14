@@ -1,8 +1,6 @@
-package com.kermeth.profilematcher.model.player.profile;
+package com.kermeth.profilematcher.profile.domain;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.kermeth.profilematcher.model.campaign.Campaign;
-import com.kermeth.profilematcher.model.Clan;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,7 +17,7 @@ public record PlayerProfile(
         Integer totalRefund,
         Integer totalTransactions,
         Instant lastPurchase,
-        List<Campaign> activeCampaigns,
+        List<String> activeCampaigns,
         List<Device> devices,
         Integer level,
         Integer xp,

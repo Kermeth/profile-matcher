@@ -1,4 +1,4 @@
-package com.kermeth.profilematcher.model;
+package com.kermeth.profilematcher.profile.domain;
 
 public record Clan(
         String id,

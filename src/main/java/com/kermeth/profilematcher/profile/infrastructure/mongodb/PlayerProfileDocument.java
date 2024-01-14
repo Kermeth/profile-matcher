@@ -1,44 +1,87 @@
-package com.kermeth.profilematcher.profile.infrastructure;
+package com.kermeth.profilematcher.profile.infrastructure.mongodb;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.kermeth.profilematcher.campaign.Campaign;
 import com.kermeth.profilematcher.profile.domain.Clan;
 import com.kermeth.profilematcher.profile.domain.Device;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Document("player_profiles")
 public class PlayerProfileDocument {
     @Id
-    private UUID playerId;
+    private ObjectId id;
+    @Indexed
+    @Field("player_id")
+    private String playerId;
+    @Field("credential")
     private String credential;
-    private Instant created;
-    private Instant modified;
-    private Instant lastSession;
+    @Field("created")
+    private String created;
+    @Field("modified")
+    private String modified;
+    @Field("last_session")
+    private String lastSession;
+    @Field("total_spent")
     private Integer totalSpent;
+    @Field("total_refund")
     private Integer totalRefund;
+    @Field("total_transactions")
     private Integer totalTransactions;
-    private Instant lastPurchase;
-    private List<Campaign> activeCampaigns;
+    @Field("last_purchase")
+    private String lastPurchase;
+    @Field("active_campaigns")
+    private List<String> activeCampaigns;
+    @Field("devices")
     private List<Device> devices;
+    @Field("level")
     private Integer level;
+    @Field("xp")
     private Integer xp;
+    @Field("total_playtime")
     private Integer totalPlaytime;
+    @Field("country")
     private String country;
+    @Field("language")
     private String language;
-    private Instant birthdate;
+    @Field("birthdate")
+    private String birthdate;
+    @Field("gender")
     private String gender;
+    @Field("inventory")
     private Map<String,Integer> inventory;
+    @Field("clan")
     private Clan clan;
-    @JsonAnySetter
     private Map<String,Object> customFields;
 
-    public PlayerProfileDocument(UUID playerId, String credential, Instant created, Instant modified, Instant lastSession, Integer totalSpent, Integer totalRefund, Integer totalTransactions, Instant lastPurchase, List<Campaign> activeCampaigns, List<Device> devices, Integer level, Integer xp, Integer totalPlaytime, String country, String language, Instant birthdate, String gender, Map<String, Integer> inventory, Clan clan, Map<String, Object> customFields) {
+    public PlayerProfileDocument(String playerId,
+                                 String credential,
+                                 String created,
+                                 String modified,
+                                 String lastSession,
+                                 Integer totalSpent,
+                                 Integer totalRefund,
+                                 Integer totalTransactions,
+                                 String lastPurchase,
+                                 List<String> activeCampaigns,
+                                 List<Device> devices,
+                                 Integer level,
+                                 Integer xp,
+                                 Integer totalPlaytime,
+                                 String country,
+                                 String language,
+                                 String birthdate,
+                                 String gender,
+                                 Map<String, Integer> inventory,
+                                 Clan clan,
+                                 Map<String, Object> customFields
+    ) {
         this.playerId = playerId;
         this.credential = credential;
         this.created = created;
@@ -62,11 +105,11 @@ public class PlayerProfileDocument {
         this.customFields = customFields;
     }
 
-    public UUID getPlayerId() {
+    public String getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(UUID playerId) {
+    public void setPlayerId(String playerId) {
         this.playerId = playerId;
     }
 
@@ -78,27 +121,27 @@ public class PlayerProfileDocument {
         this.credential = credential;
     }
 
-    public Instant getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Instant created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
-    public Instant getModified() {
+    public String getModified() {
         return modified;
     }
 
-    public void setModified(Instant modified) {
+    public void setModified(String modified) {
         this.modified = modified;
     }
 
-    public Instant getLastSession() {
+    public String getLastSession() {
         return lastSession;
     }
 
-    public void setLastSession(Instant lastSession) {
+    public void setLastSession(String lastSession) {
         this.lastSession = lastSession;
     }
 
@@ -126,19 +169,19 @@ public class PlayerProfileDocument {
         this.totalTransactions = totalTransactions;
     }
 
-    public Instant getLastPurchase() {
+    public String getLastPurchase() {
         return lastPurchase;
     }
 
-    public void setLastPurchase(Instant lastPurchase) {
+    public void setLastPurchase(String lastPurchase) {
         this.lastPurchase = lastPurchase;
     }
 
-    public List<Campaign> getActiveCampaigns() {
+    public List<String> getActiveCampaigns() {
         return activeCampaigns;
     }
 
-    public void setActiveCampaigns(List<Campaign> activeCampaigns) {
+    public void setActiveCampaigns(List<String> activeCampaigns) {
         this.activeCampaigns = activeCampaigns;
     }
 
@@ -190,11 +233,11 @@ public class PlayerProfileDocument {
         this.language = language;
     }
 
-    public Instant getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Instant birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -222,10 +265,12 @@ public class PlayerProfileDocument {
         this.clan = clan;
     }
 
+    @JsonAnyGetter
     public Map<String, Object> getCustomFields() {
         return customFields;
     }
 
+    @JsonAnySetter
     public void setCustomFields(Map<String, Object> customFields) {
         this.customFields = customFields;
     }

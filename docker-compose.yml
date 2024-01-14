@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+
+  profile-matcher:
+    container_name: profile-matcher
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=playerProfiles
+      - CAMPAIGN_SERVICE_URL=http://faker
+      - CAMPAIGN_SERVICE_PORT=3030
+    depends_on:
+      - mongo
+      - faker
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    hostname: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: playerProfiles
+
+  faker:
+    image: dotronglong/faker:stable
+    volumes:
+      - ./mocks:/app/mocks
+    ports:
+      - "3030:3030"

@@ -3,6 +3,17 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: profiles
+      database: playerProfiles
       auto-index-creation: true
-      uuid-representation: standard
+
+campaign-service:
+  url: http://localhost
+  port: 3030
+
+logging:
+  level:
+    com.kermeth.profilematcher: debug
+    org.springframework:
+      root: debug
+      data:
+        mongodb: debug

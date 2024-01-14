@@ -1,4 +1,4 @@
-package com.kermeth.profilematcher.campaign;
+package com.kermeth.profilematcher.campaign.domain;
 
 import com.kermeth.profilematcher.profile.domain.PlayerProfile;
 

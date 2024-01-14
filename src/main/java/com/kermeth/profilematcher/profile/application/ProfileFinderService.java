@@ -1,19 +1,24 @@
-package com.kermeth.profilematcher.service;
+package com.kermeth.profilematcher.profile.application;
 
-import com.kermeth.profilematcher.profile.application.PlayerProfileRepository;
 import com.kermeth.profilematcher.profile.domain.PlayerProfile;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
-@Service
 public class ProfileFinderService {
 
-    private final PlayerProfileRepository playerProfileRepository;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public ProfileFinderService(PlayerProfileRepository playerProfileRepository) {
-        this.playerProfileRepository = playerProfileRepository;
+    private final PlayerProfileRepositoryReactive playerProfileRepositoryReactive;
+
+    public ProfileFinderService(PlayerProfileRepositoryReactive playerProfileRepositoryReactive) {
+        this.playerProfileRepositoryReactive = playerProfileRepositoryReactive;
     }
 
-    public PlayerProfile getProfile(String playerId) {
-        return null;
+    public Mono<PlayerProfile> getProfile(String playerId) {
+        logger.debug("Getting profile for player {}", playerId);
+        return playerProfileRepositoryReactive.getProfile(playerId)
+                .doOnNext(playerProfile -> logger.debug("Found profile for player {}", playerId))
+                .switchIfEmpty(Mono.error(new PlayerProfileNotFoundException(playerId)));
     }
 }
