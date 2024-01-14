@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: profiles
+      auto-index-creation: true
+      uuid-representation: standard
