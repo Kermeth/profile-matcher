@@ -37,7 +37,8 @@ public class ProfileMatcherService {
                 });
 
         // Search for the current campaign from an external API
-        var currentCampaign = campaignFinderService.findCurrentCampaign();
+        var currentCampaign = campaignFinderService.findCurrentCampaign()
+                .onErrorMap(throwable -> new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Campaign Service unavailable", throwable));
 
         // Zip requests in parallel virtual threads
         return Mono.zip(profile, currentCampaign)
